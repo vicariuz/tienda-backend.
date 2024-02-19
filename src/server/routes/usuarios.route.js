@@ -8,5 +8,10 @@ const router = express.Router()
 router.post('/login', usuarios.login)
 router.get('/usuarios', authToken, usuarios.findUserByEmail)
 router.post('/usuarios', usuarios.register)
+router.post('/productos/nuevo', usuarios.nuevoProducto)
+router.put('/productos/edit/:id', usuarios.actualizarProducto)
+router.delete('/productos/:id', authToken, usuarios.eliminarProducto);
+router.get('/productos', authToken, usuarios.ObtenerProductos);
+
 
 export default router
