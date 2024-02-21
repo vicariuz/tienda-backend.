@@ -16,4 +16,4 @@ app.use(routes.errors)
 
 app.listen(PORT, ()=> console.log(`SERVER UP in URL: http://localhost:${PORT}`))
 
-export default app
+export default app;

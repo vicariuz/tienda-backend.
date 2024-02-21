@@ -29,6 +29,7 @@ export const nuevoProducto = (req, res) =>
 sql.nuevoProducto (req.body)
     .then(([producto]) => res.status(HTTP_STATUS.created.code).json({ producto_id: producto.producto_id, nombre: producto.nombre }))
     .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error))
+    
             
 
 export const actualizarProducto = (req, res) => {
@@ -55,3 +56,24 @@ export const ObtenerProductos = (req, res) =>
     sql.ObtenerProductos()
         .then((productos) => res.status(HTTP_STATUS.ok.code).json({ productos }))
         .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
+
+
+export const agregarProductoAlCarrito = async (req, res) => {
+            try {
+                const resultado = await sql.agregarProductoAlCarrito();
+                res.status(HTTP_STATUS.ok.code).json(resultado);
+            } catch (error) {
+                res.status(HTTP_STATUS.internal_server_error.code).json({ error: error.message });
+            }
+        };
+        
+        
+ export const realizarVenta = async (req, res) => {
+            try {
+                const resultado = await sql.realizarVenta();
+                res.status(HTTP_STATUS.ok.code).json(resultado);
+            } catch (error) {
+                res.status(HTTP_STATUS.internal_server_error.code).json({ error: error.message });
+            }
+        };
+        

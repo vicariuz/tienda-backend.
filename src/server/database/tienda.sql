@@ -27,7 +27,9 @@ CREATE TABLE productos (
 CREATE TABLE carrito (
   carrito_id SERIAL PRIMARY KEY,
   usuario_id INTEGER,
-  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  total DECIMAL(10,2) NOT NULL,
+  estado_pedido VARCHAR(50) NOT NULL,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
 );
 
