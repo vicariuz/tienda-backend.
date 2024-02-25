@@ -1,7 +1,7 @@
 import db from '../database/db.js'
 import {encrypt, compare } from '../../../utils/bcrypt.js'
 
-// login
+// login (ok)
 export const login = async(email, password) => {
     const [user]= await db('SELECT * FROM usuarios WHERE email = $1;', [email])
     return !compare(password, user.password) ?  []: [user]
@@ -10,16 +10,16 @@ export const login = async(email, password) => {
 export const findUserByEmail = async (email = ' ') =>
 await db('SELECT * FROM usuarios WHERE email = $1;', [email])
 
-// Registrar un usuario
-export const register = async ({nombre, email, password, rol}) => {
-    const query = 'INSERT INTO usuarios (usuario_id,nombre,email,password,rol) VALUES (DEFAULT, $1,$2,$3,$4) RETURNING *;'
-    return await db(query, [nombre, email,encrypt(password), rol])
+// Registrar un usuario (ok)
+export const register = async ({nombre, fechanacimiento, email, direccion, password, rol}) => {
+    const query = 'INSERT INTO usuarios (usuario_id,nombre, fechanacimiento, email,direccion, password, rol) VALUES (DEFAULT, $1,$2,$3,$4,$5,$6) RETURNING *;'
+    return await db(query, [nombre, fechanacimiento, email, direccion, encrypt(password), rol])
 }
 
-// Registrar un nuevo producto
-export const nuevoProducto = async ({nombre, descripcion, precio, stock, categoria,producto_img}) => {
-    const query = 'INSERT INTO productos (producto_id, nombre, descripcion, precio, stock, categoria, producto_img) VALUES (DEFAULT, $1,$2,$3,$4,$5,$6) RETURNING *;'
-    return await db(query, [nombre, descripcion, precio, stock, categoria,producto_img])
+// Registrar un nuevo producto (proceso)
+export const nuevoProducto = async ({p_name, p_descripcion, p_precio, p_descuento,p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img}) => {
+    const query = 'INSERT INTO productos (producto_id, p_name, p_descripcion, p_precio,p_descuento, p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img) VALUES (DEFAULT, $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *;'
+    return await db(query, [p_name, p_descripcion, p_precio, p_descuento, p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img])
 }
 
 // actualizar un producto

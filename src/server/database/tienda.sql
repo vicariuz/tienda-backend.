@@ -5,22 +5,28 @@ CREATE USER app WITH PASSWORD 'password123';
 GRANT ALL PRIVILEGES ON DATABASE tienda TO app;
 
 CREATE TABLE usuarios (
-  usuario_id SERIAL PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  rol VARCHAR (255) NOT NULL
+    usuario_id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    fechanacimiento DATE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    rol VARCHAR(50) NOT NULL
 );
-
 
 CREATE TABLE productos (
   producto_id SERIAL PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  descripcion VARCHAR(255),
-  precio DECIMAL(10,2) NOT NULL,
-  stock INTEGER NOT NULL,
-  categoria VARCHAR(255),
-  producto_img VARCHAR(255)
+  p_name VARCHAR(255) NOT NULL,
+  p_descripcion VARCHAR(500),
+  p_precio DECIMAL(10,2) NOT NULL,
+  p_descuento DECIMAL(10,2) NOT NULL,
+  p_stock INTEGER NOT NULL,
+  p_category VARCHAR(255),
+  p_feelings VARCHAR(255),
+  p_negatives VARCHAR(255),
+  p_helpwith VARCHAR(255),
+  p_rating INTEGER NOT NULL,
+  p_img VARCHAR(255)
 );
 
 
