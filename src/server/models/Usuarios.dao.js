@@ -1,7 +1,7 @@
 import db from '../database/db.js'
 import {encrypt, compare } from '../../../utils/bcrypt.js'
 
-// login (ok)
+// Login OK
 export const login = async(email, password) => {
     const [user]= await db('SELECT * FROM usuarios WHERE email = $1;', [email])
     return !compare(password, user.password) ?  []: [user]
@@ -10,7 +10,7 @@ export const login = async(email, password) => {
 export const findUserByEmail = async (email = ' ') =>
 await db('SELECT * FROM usuarios WHERE email = $1;', [email])
 
-// Registrar un usuario (ok)
+// Registrar usuario OK
 export const register = async ({nombre, fechanacimiento, email, direccion, password, rol}) => {
     const query = 'INSERT INTO usuarios (usuario_id,nombre, fechanacimiento, email,direccion, password, rol) VALUES (DEFAULT, $1,$2,$3,$4,$5,$6) RETURNING *;'
     return await db(query, [nombre, fechanacimiento, email, direccion, encrypt(password), rol])
@@ -22,22 +22,30 @@ export const nuevoProducto = async ({p_name, p_descripcion, p_precio, p_descuent
     return await db(query, [p_name, p_descripcion, p_precio, p_descuento, p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img])
 }
 
-// Obtener todos los productos (ok)
+// Obtener todos los productos OK
 export const ObtenerProductos = async () => {
     const query = 'SELECT * FROM productos;';
     return await db(query,[]);
 };
 
-// Eliminar Producto -----proceso
+// Eliminar Producto OK
 export const eliminarProducto = async (producto_id) => {
     const query = 'DELETE FROM productos WHERE producto_id = $1;';
     await db(query, [producto_id]);
 };
 
-
-
-
-
+// Editar o ctualizar un producto
+export const actualizarProducto = async ({ id, p_name, p_descripcion, p_precio, p_descuento, p_stock, p_category, p_feelings, p_negatives, p_helpwith, p_rating, p_img }) => {
+    const query = `UPDATE productos SET p_name = $2, p_descripcion = $3, p_precio = $4, p_descuento = $5, p_stock = $6, p_category = $7, p_feelings = $8, p_negatives = $9, p_helpwith = $10, p_rating = $11, p_img = $12 WHERE producto_id = $1 RETURNING *; `;
+    try {
+        const result = await db(query, [id, p_name, p_descripcion, p_precio, p_descuento, p_stock, p_category, p_feelings, p_negatives, p_helpwith, p_rating, p_img]);
+        console.log('Resultado de la base de datos:', result);
+        return result;
+    } catch (error) {
+        console.error('Error en la consulta SQL:', error);
+        throw error;
+    }
+};
 
 
 
@@ -48,11 +56,7 @@ export const eliminarProducto = async (producto_id) => {
 
 //--------------------------------
 
-// actualizar un producto
-export const actualizarProducto = async ({ id, nombre, descripcion, precio, stock, categoria, producto_img }) => {
-    const query = `UPDATE productos SET nombre = $2, descripcion = $3, precio = $4, stock = $5, categoria = $6, producto_img = $7 WHERE producto_id = $1 RETURNING *; `;
-    return await db(query, [id, nombre, descripcion, precio, stock, categoria, producto_img]);
-};
+
 
 
 

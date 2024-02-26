@@ -20,9 +20,10 @@ router.get('/productos', usuarios.ObtenerProductos);
 // borrar productos (ok)
 router.delete('/productos/:producto_id', usuarios.eliminarProducto);
 
-
+// editar productos (ok)
 router.put('/productos/edit/:id', usuarios.actualizarProducto)
 
+//-------------------------- PENDIENTE
 router.post('agregarProductoAlCarrito', usuarios.agregarProductoAlCarrito);
 router.post('/realizarVenta', authToken, usuarios.realizarVenta)
 
