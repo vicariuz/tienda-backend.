@@ -16,11 +16,37 @@ export const register = async ({nombre, fechanacimiento, email, direccion, passw
     return await db(query, [nombre, fechanacimiento, email, direccion, encrypt(password), rol])
 }
 
-// Registrar un nuevo producto (proceso)
+// Registrar un nuevo producto (ok)
 export const nuevoProducto = async ({p_name, p_descripcion, p_precio, p_descuento,p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img}) => {
     const query = 'INSERT INTO productos (producto_id, p_name, p_descripcion, p_precio,p_descuento, p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img) VALUES (DEFAULT, $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *;'
     return await db(query, [p_name, p_descripcion, p_precio, p_descuento, p_stock, p_category,p_feelings,p_negatives,p_helpwith,p_rating,p_img])
 }
+
+// Obtener todos los productos (ok)
+export const ObtenerProductos = async () => {
+    const query = 'SELECT * FROM productos;';
+    return await db(query,[]);
+};
+
+// Eliminar Producto -----proceso
+export const eliminarProducto = async (producto_id) => {
+    const query = 'DELETE FROM productos WHERE producto_id = $1;';
+    await db(query, [producto_id]);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+//--------------------------------
 
 // actualizar un producto
 export const actualizarProducto = async ({ id, nombre, descripcion, precio, stock, categoria, producto_img }) => {
@@ -28,17 +54,8 @@ export const actualizarProducto = async ({ id, nombre, descripcion, precio, stoc
     return await db(query, [id, nombre, descripcion, precio, stock, categoria, producto_img]);
 };
 
-// eliminar Producto
-export const eliminarProducto = async (productoId) => {
-    const query = 'DELETE FROM productos WHERE producto_id = $1;';
-    return await db(query, [productoId]);
-};
 
-// Obtener todos los productos
-export const ObtenerProductos = async () => {
-    const query = 'SELECT * FROM productos;';
-    return await db(query,[]);
-};
+
 
 //Agregar Producto al Carrito 
 export const agregarProductoAlCarrito = async (req, res) => {

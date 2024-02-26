@@ -14,11 +14,15 @@ router.post('/usuarios', usuarios.register)
 // crear producto (ok)
 router.post('/productos/nuevo', usuarios.nuevoProducto)
 
-// obtener productos para gallery (proceso)
+// obtener productos para gallery (ok)
 router.get('/productos', usuarios.ObtenerProductos);
 
+// borrar productos (ok)
+router.delete('/productos/:producto_id', usuarios.eliminarProducto);
+
+
 router.put('/productos/edit/:id', usuarios.actualizarProducto)
-router.delete('/productos/:id', authToken, usuarios.eliminarProducto);
+
 router.post('agregarProductoAlCarrito', usuarios.agregarProductoAlCarrito);
 router.post('/realizarVenta', authToken, usuarios.realizarVenta)
 

@@ -47,38 +47,43 @@ sql.nuevoProducto (req.body)
     
 
 //-------------------------------------------- ok
- export const ObtenerProductos = (req, res) => 
+export const ObtenerProductos = (req, res) => 
 sql.ObtenerProductos()
     .then((productos) => res.status(HTTP_STATUS.ok.code).json({ productos }))
     .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
     
-
-
-
-
-
+//-------------------------------------------- proceso
+export const eliminarProducto = (req, res) => {
+const { producto_id } = req.params;
+sql.eliminarProducto(producto_id)
+    .then(() => res.status(HTTP_STATUS.ok.code).json({ message: 'Producto eliminado exitosamente' }))
+    .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
+    };
     
-//-------------------------------------------- ok
+
+
+
+
+
+
+
+
+
+
+//-------------------------------------------- 
+//-------------------------------------------- 
 export const actualizarProducto = (req, res) => {
     const { id } = req.params;
     const { nombre, descripcion, precio, stock, categoria, producto_img } = req.body;
 
     sql.actualizarProducto({ id, nombre, descripcion, precio, stock, categoria, producto_img })
         .then(([producto]) => {
-            res.status(HTTP_STATUS.ok.code).json({ producto_id: producto.producto_id, nombre: producto.nombre });
+            res.status(HTTP_STATUS.ok.code).json({ producto_id: producto.producto_id, nombre: producto.p_nombre });
         })
         .catch((error) => {
             res.status(HTTP_STATUS.internal_server_error.code).json(error);
         });
 };
-
-export const eliminarProducto = (req, res) => {
-    const { id } = req.params;
-    sql.eliminarProducto(id)
-        .then(() => res.status(HTTP_STATUS.ok.code).json({ message: 'Producto eliminado exitosamente' }))
-        .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
-};
-
 
 
 export const agregarProductoAlCarrito = async (req, res) => {
