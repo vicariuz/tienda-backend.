@@ -94,18 +94,43 @@ export const agregarProductoAlCarrito = async (req, res) => {
     }
   };
 
+export const obtenerProductosEnCarrito = async (req, res) => {
+    const { usuario_id } = req.params;
+    try {
+        const productosEnCarrito = await sql.obtenerProductosEnCarrito(usuario_id);
+        res.status(HTTP_STATUS.ok.code).json({ productosEnCarrito });
+    } catch (error) {
+        res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+};
 
+export const eliminarProductoDelCarrito = async (req, res) => {
+    const { carrito_id } = req.params;
+    try {
+        await sql.eliminarProductoDelCarrito(carrito_id);
+        res.status(HTTP_STATUS.ok.code).json({ message: 'Producto eliminado del carrito exitosamente' });
+    } catch (error) {
+        res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+};
 
+// Operaciones de venta
+export const crearVenta = async (req, res) => {
+    const { usuario_id, total, fecha } = req.body;
+    try {
+        const venta = await sql.crearVenta(usuario_id, total, fecha);
+        res.status(HTTP_STATUS.ok.code).json({ venta });
+    } catch (error) {
+        res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+};
 
-//-------------------------------------------- 
-//-------------------------------------------- 
-        
- export const realizarVenta = async (req, res) => {
-            try {
-                const resultado = await sql.realizarVenta();
-                res.status(HTTP_STATUS.ok.code).json(resultado);
-            } catch (error) {
-                res.status(HTTP_STATUS.internal_server_error.code).json({ error: error.message });
-            }
-        };
-        
+export const obtenerVentasUsuario = async (req, res) => {
+    const { usuario_id } = req.params;
+    try {
+        const ventasUsuario = await sql.obtenerVentasUsuario(usuario_id);
+        res.status(HTTP_STATUS.ok.code).json({ ventasUsuario });
+    } catch (error) {
+        res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+};

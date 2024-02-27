@@ -28,11 +28,11 @@ router.put('/productos/edit/:id', usuarios.actualizarProducto)
 
 // Operaciones relacionadas con el carrito
 router.post('/carrito', usuarios.agregarProductoAlCarrito);
-//router.get('/carrito/:usuario_id', usuarios.obtenerProductosEnCarrito);
-//router.delete('/carrito/:carrito_id', usuarios.eliminarProductoDelCarrito);
+router.get('/carrito/:usuario_id', usuarios.obtenerProductosEnCarrito);
+router.delete('/carrito/:carrito_id', usuarios.eliminarProductoDelCarrito);
 
 // Operaciones relacionadas con las ventas
-//router.post('/ventas', usuarios.crearVenta);
-//router.get('/ventas/:usuario_id', usuarios.obtenerVentasUsuario)
+router.post('/ventas', usuarios.crearVenta);
+router.get('/ventas/:usuario_id', usuarios.obtenerVentasUsuario)
 
 export default router;
