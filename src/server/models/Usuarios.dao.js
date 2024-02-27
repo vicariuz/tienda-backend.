@@ -53,13 +53,18 @@ export const actualizarProducto = async ({ id, p_name, p_descripcion, p_precio, 
     }
 };
 
+// Operaciones carrito
+export const agregarProductoAlCarrito = async (usuario_id, producto_id, cantidad) => {
+    const query = 'INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES ($1, $2, $3) RETURNING *;';
+    return await db(query, [usuario_id, producto_id, cantidad]);
+};
 
 
 
 //--------------------------------
 
 //Agregar Producto al Carrito 
-export const agregarProductoAlCarrito = async (req, res) => {
+export const agregarProductoAlCarrito2 = async (req, res) => {
     const { usuario_id, producto_id, cantidad } = req.body;
 
     // Obtener el precio del producto desde la base de datos

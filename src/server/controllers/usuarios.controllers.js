@@ -59,7 +59,6 @@ export const ObtenerProductoId = (req, res) => {
         .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
         };
 
-
 //-------------------------------------------- OK
 export const eliminarProducto = (req, res) => {
     const { producto_id } = req.params;
@@ -67,8 +66,6 @@ export const eliminarProducto = (req, res) => {
             .then(() => res.status(HTTP_STATUS.ok.code).json({ message: 'Producto eliminado exitosamente' }))
             .catch((error) => res.status(HTTP_STATUS.internal_server_error.code).json(error));
             };
-
-
 
 //-------------------------------------------- OK
 export const actualizarProducto = (req, res) => {
@@ -85,24 +82,23 @@ export const actualizarProducto = (req, res) => {
             });
         };
 
-
-
-
-
-//-------------------------------------------- 
-//-------------------------------------------- 
-
-
-
+//-------------------------------------------- OK
+// Operaciones de carrito
 export const agregarProductoAlCarrito = async (req, res) => {
-            try {
-                const resultado = await sql.agregarProductoAlCarrito();
-                res.status(HTTP_STATUS.ok.code).json(resultado);
-            } catch (error) {
-                res.status(HTTP_STATUS.internal_server_error.code).json({ error: error.message });
-            }
-        };
-        
+    const { usuario_id, producto_id, cantidad } = req.body;
+    try {
+      const carrito = await sql.agregarProductoAlCarrito(usuario_id, producto_id, cantidad);
+      res.status(HTTP_STATUS.ok.code).json({ carrito });
+    } catch (error) {
+      res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+  };
+
+
+
+
+//-------------------------------------------- 
+//-------------------------------------------- 
         
  export const realizarVenta = async (req, res) => {
             try {

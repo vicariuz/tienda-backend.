@@ -2,10 +2,9 @@ import express from 'express';
 import * as usuarios from '../controllers/usuarios.controllers.js';
 import {authToken} from '../middlewares/cursos.middlewares.js';
 
-
 const router = express.Router();
 
-// crear uusario (ok)
+// crear usuario (ok)
 router.post('/login', usuarios.login)
 
 //router.get('/usuarios', authToken, usuarios.findUserByEmail)//xx
@@ -24,9 +23,16 @@ router.delete('/productos/:producto_id', usuarios.eliminarProducto);
 // editar productos (ok)
 router.put('/productos/edit/:id', usuarios.actualizarProducto)
 
-//-------------------------- PENDIENTE
-router.post('agregarProductoAlCarrito', usuarios.agregarProductoAlCarrito);
-router.post('/realizarVenta', authToken, usuarios.realizarVenta)
 
+//=============== VENTA =========================================
+
+// Operaciones relacionadas con el carrito
+router.post('/carrito', usuarios.agregarProductoAlCarrito);
+//router.get('/carrito/:usuario_id', usuarios.obtenerProductosEnCarrito);
+//router.delete('/carrito/:carrito_id', usuarios.eliminarProductoDelCarrito);
+
+// Operaciones relacionadas con las ventas
+//router.post('/ventas', usuarios.crearVenta);
+//router.get('/ventas/:usuario_id', usuarios.obtenerVentasUsuario)
 
 export default router;
