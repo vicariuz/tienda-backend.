@@ -1,11 +1,19 @@
+//usuarios.dao.js
 import db from '../database/db.js'
 import {encrypt, compare } from '../../../utils/bcrypt.js'
 
 // Login OK
-export const login = async(email, password) => {
-    const [user]= await db('SELECT * FROM usuarios WHERE email = $1;', [email])
-    return !compare(password, user.password) ?  []: [user]
-}   
+// En tu módulo SQL
+// En tu módulo SQL
+export const login = async (email, password) => {
+    const [user] = await db('SELECT * FROM usuarios WHERE email = $1;', [email]);
+    if (!user) {
+        // No se encontró ningún usuario con el correo electrónico proporcionado
+        return null;
+    }
+
+    return compare(password, user.password) ? [user] : null;
+};
 
 export const findUserByEmail = async (email = ' ') =>
 await db('SELECT * FROM usuarios WHERE email = $1;', [email])
@@ -75,7 +83,7 @@ export const agregarProductoAlCarrito = async (usuario_id, producto_id, cantidad
 // operaciones venta
 
 // Realizar Venta
-export const crearVenta = async (usuario_id, total, fecha) => {
+/*export const crearVenta = async (usuario_id, total, fecha) => {
     const query = 'INSERT INTO ventas (usuario_id, total, fecha) VALUES ($1, $2, $3) RETURNING *;';
     const result = await db(query, [usuario_id, total, fecha]);
   
@@ -99,4 +107,37 @@ export const crearVenta = async (usuario_id, total, fecha) => {
   export const obtenerVentasUsuario = async (usuario_id) => {
     const query = 'SELECT * FROM ventas WHERE usuario_id = $1;';
     return await db(query, [usuario_id]);
-  };
+  };*/
+
+// ultimos cambios
+// venta simple
+export const insertarVenta = async (usuario_id, producto_id, cantidad) => {
+    const query = `INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES ($1, $2, $3) RETURNING *;`;
+    const values = [usuario_id, producto_id, cantidad];
+  
+    try {
+      // Realizar la inserción en la tabla de carrito
+      const carritoResult = await db(query, values);
+  
+      // Disminuir el inventario de los productos vendidos
+      const updateQuery = `
+        UPDATE productos 
+        SET p_stock = p_stock - $1
+        WHERE producto_id = $2;
+      `;
+  
+      // Obtener la cantidad del carrito
+      const carritoQuery = 'SELECT cantidad FROM carrito WHERE carrito_id = $1;';
+      const carritoValues = [carritoResult[0].carrito_id];
+      const carrito = await db(carritoQuery, carritoValues);
+  
+      // Ejecutar el query de actualización del inventario
+      const updateValues = [carrito[0].cantidad, producto_id];
+      await db(updateQuery, updateValues);
+  
+      return carritoResult;
+    } catch (error) {
+      console.error('Error al realizar la venta:', error);
+      throw error;
+    }
+  };

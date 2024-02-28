@@ -1,24 +1,28 @@
+//usuarios.controllers.js
 import * as sql from '../models/Usuarios.dao.js'
 import HTTP_STATUS from '../../config/constants.js'
 import {jwtSign, jwtVerify} from '../../../utils/jwt.js'
 
 
 //------------------------------------- OK
-export const login = (req, res) =>
-    sql.login(req.body.email, req.body.password)
-        .then(([user]) => {
+export const login = async (req, res) => {
+    try {
+        const [user] = await sql.login(req.body.email, req.body.password);
         if (user?.email) {
             const tokenData = {
-            nombre: user.nombre,
-            rol: user.rol
+                nombre: user.nombre,
+                rol: user.rol,
+                usuario_id: user.usuario_id
             };
             const token = jwtSign(tokenData);
-            res.status(HTTP_STATUS.ok.code).json({ token, nombre: user.nombre, rol: user.rol });
+            res.status(HTTP_STATUS.ok.code).json({ token, nombre: user.nombre, rol: user.rol, usuario_id: user.usuario_id });
         } else {
             res.status(HTTP_STATUS.unauthorized.code).json({ code: HTTP_STATUS.unauthorized.code, message: HTTP_STATUS.unauthorized.text.op0 });
         }
-        })
-        .catch((error) => res.status(HTTP_STATUS.internal_server_error).json(error));
+    } catch (error) {
+        return res.status(HTTP_STATUS.internal_server_error.code).json(error);
+    }
+};
 
 //----------------------------------------------- sin usar
 export const findUserByEmail = (req,res) => {
@@ -85,7 +89,7 @@ export const actualizarProducto = (req, res) => {
 //-------------------------------------------- OK
 // Operaciones de carrito
 export const agregarProductoAlCarrito = async (req, res) => {
-    const { usuario_id, producto_id, cantidad } = req.body;
+    const { usuario_id, productos } = req.body;
     try {
       const carrito = await sql.agregarProductoAlCarrito(usuario_id, producto_id, cantidad);
       res.status(HTTP_STATUS.ok.code).json({ carrito });
@@ -134,3 +138,33 @@ export const obtenerVentasUsuario = async (req, res) => {
         res.status(HTTP_STATUS.internal_server_error.code).json(error);
     }
 };
+
+// ultimos cambios venta simple
+
+export const ventaSimple = async (req, res) => {
+    const { usuario_id, productos } = req.body;
+    try {
+        // Iterar sobre cada producto y realizar la inserción en la base de datos
+        const promises = 
+productos.map
+(async (producto) => {
+            const { producto_id, cantidad } = producto;
+
+            // Insertar el registro en la tabla de ventas
+            const venta = await sql.insertarVenta(usuario_id, producto_id, cantidad);
+
+            return venta;
+        });
+
+        // Esperar a que todas las inserciones se completen
+        const results = await Promise.all(promises);
+
+        // Enviar una respuesta al cliente indicando que la venta se realizó correctamente
+        res.status(HTTP_STATUS.ok.code).json({ results });
+    } catch (error) {
+        // Manejar cualquier error que ocurra durante la inserción de productos en la venta
+        console.error('Error al realizar la venta:', error);
+        // Enviar una respuesta de error al cliente
+        res.status(HTTP_STATUS.internal_server_error.code).json({ error: 'Error al procesar la venta' });
+    }
+}; 

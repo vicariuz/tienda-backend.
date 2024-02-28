@@ -32,7 +32,7 @@ router.get('/carrito/:usuario_id', usuarios.obtenerProductosEnCarrito);
 router.delete('/carrito/:carrito_id', usuarios.eliminarProductoDelCarrito);
 
 // Operaciones relacionadas con las ventas
-router.post('/ventas', usuarios.crearVenta);
+router.post('/ventasimple', usuarios.ventaSimple);
 router.get('/ventas/:usuario_id', usuarios.obtenerVentasUsuario)
 
 export default router;
