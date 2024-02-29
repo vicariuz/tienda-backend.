@@ -31,21 +31,18 @@ CREATE TABLE productos (
 
 
 CREATE TABLE carrito (
+    carrito_id SERIAL PRIMARY KEY,
+    usuario_id INTEGER,
+    producto_id INTEGER,
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+    FOREIGN KEY (producto_id) REFERENCES productos(producto_id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id) ON DELETE CASCADE
+);
+------
+CREATE TABLE carrito (
   carrito_id SERIAL PRIMARY KEY,
-  usuario_id INTEGER,
-  fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  total DECIMAL(10,2) NOT NULL,
-  estado_pedido VARCHAR(50) NOT NULL,
-  FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
-);
-
-
-CREATE TABLE detalle_carrito (
-  detalle_carrito_id SERIAL PRIMARY KEY,
-  carrito_id INTEGER,
-  producto_id INTEGER,
+  usuario_id INTEGER REFERENCES usuarios(usuario_id) ON DELETE CASCADE,
+  producto_id INTEGER REFERENCES productos(producto_id) ON DELETE CASCADE,
   cantidad INTEGER NOT NULL,
-  precio_venta DECIMAL(10,2) NOT NULL,
-  FOREIGN KEY (carrito_id) REFERENCES carrito(carrito_id),
-  FOREIGN KEY (producto_id) REFERENCES productos(producto_id)
-);
+  CHECK (cantidad > 0) -- Asegura que la cantidad sea mayor que cero
+); 
