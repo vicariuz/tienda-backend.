@@ -38,11 +38,3 @@ CREATE TABLE carrito (
     FOREIGN KEY (producto_id) REFERENCES productos(producto_id) ON DELETE CASCADE,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id) ON DELETE CASCADE
 );
-------
-CREATE TABLE carrito (
-  carrito_id SERIAL PRIMARY KEY,
-  usuario_id INTEGER REFERENCES usuarios(usuario_id) ON DELETE CASCADE,
-  producto_id INTEGER REFERENCES productos(producto_id) ON DELETE CASCADE,
-  cantidad INTEGER NOT NULL,
-  CHECK (cantidad > 0) -- Asegura que la cantidad sea mayor que cero
-); 
